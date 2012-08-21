@@ -29,10 +29,10 @@ class PropertiesFile extends Properties {
         $sec_name = ""; 
         
         // check extends 
-        $isExtends = $this->isExtends($lines[0]);   
-        if ($isExtends){
+        $extendedFilename = $this->getExtendedFilename($lines[0]);   
+        if ($extendedFilename){
         	//get path create file and load again 
-        	$newFileName = substr($filePath,0,strrpos($filePath,'/')) . '/' .$isExtends . '.properties';
+        	$newFileName = substr($filePath,0,strrpos($filePath,'/')) . '/' .$extendedFilename . '.properties';
         	$file = new PhingFile($newFileName); 
         	//load before so we can override later 
         	$this->load($file);
@@ -55,11 +55,11 @@ class PropertiesFile extends Properties {
         } // for each line 
     }
     /** 
-     * Check if .properties file is extending another file
+     * Get the the name of the extended file 
      * @param string $line
      * @return string|false 
      */
-    protected function isExtends($line){
+    protected function getExtendedFilename($line){
     	if (preg_match('#'.self::EXTENDS_REGEX.'#', $line,$matches)){
     		return trim($matches[1]); 
     	}
